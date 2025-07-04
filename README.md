@@ -1,21 +1,10 @@
 # FarmConnect
 ## MY KASMALL PROJECT
 FarmConnect is a modern, cross-platform application built with .NET MAUI (.NET 9) designed to connect farmers and clients, promoting sustainable agriculture and fresh produce access. The app features a clean, responsive design with natural, earthy tones to reflect its agricultural focus.
-## Day 1
+
 ## Features
 
 - **Cross-Platform:** Runs on iOS, Android, Windows, and macOS.
-- **Modern Login UI:**  
-  - Soft green gradient background inspired by nature    
-  - Centered, rounded login card for all devices  
-  - Email/Username and Password fields (with visibility toggle)  
-  - "Remember Me" option  
-  - "Forgot Password?" recovery link  
-  - Social login buttons (Google, Facebook)  
-  - Sign-up navigation for new users  
-- **Responsive Design:** Adapts to mobile, tablet, and desktop screens.
-- **Touch-Optimized:** All controls are easy to use on touch devices.
-
 ## Getting Started
 
 ### Prerequisites
