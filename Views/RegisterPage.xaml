@@ -1,0 +1,147 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FarmConnect.Views.RegisterPage"
+             xmlns:viewModels="clr-namespace:FarmConnect.ViewModel"
+             x:DataType="viewModels:RegisterViewModel" 
+             Title="RegisterPage"
+             BackgroundColor="Transparent">
+    
+    <ContentPage.Background>
+        <LinearGradientBrush StartPoint="0,0" EndPoint="0,1">
+            <GradientStop Color="#e8f5e9" Offset="0.0" />
+            <GradientStop Color="#a5d6a7" Offset="1.0" />
+        </LinearGradientBrush>
+    </ContentPage.Background>
+    <ScrollView>
+        <Grid>
+            <Border BackgroundColor="White"
+                    StrokeThickness="1"
+                    Stroke="#c8e6c9"
+                    Padding="28"
+                    StrokeShape="RoundRectangle 24"
+                    WidthRequest="400"
+                    MinimumWidthRequest="280"
+                    MaximumWidthRequest="480"
+                    Margin="0,60,0,0">
+                <VerticalStackLayout Spacing="18">
+                    <!-- Header -->
+                    <Label Text="Create your FarmConnect Account"
+                           FontSize="22"
+                           FontAttributes="Bold"
+                           TextColor="#388e3c"
+                           HorizontalOptions="Center"/>
+                    <Label Text="Join the fresh produce community in Kenya"
+                           FontSize="15"
+                           TextColor="#689f38"
+                           HorizontalOptions="Center"
+                           Margin="0,0,0,10"/>
+
+                    <!-- Common Fields -->
+                    <Label Text="Full Name" FontAttributes="Bold" TextColor="#388e3c"/>
+                    <Entry Placeholder="Full Name"
+                           Text="{Binding FullName}"
+                           BackgroundColor="#f1f8e9"
+                           TextColor="#388e3c"
+                           HeightRequest="44"/>
+
+                    <Label Text="Email Address" FontAttributes="Bold" TextColor="#388e3c"/>
+                    <Entry Placeholder="Email"
+                           Text="{Binding Email}"
+                           Keyboard="Email"
+                           BackgroundColor="#f1f8e9"
+                           TextColor="#388e3c"
+                           HeightRequest="44"/>
+
+                    <Label Text="Phone Number" FontAttributes="Bold" TextColor="#388e3c"/>
+                    <Entry Placeholder="Phone Number"
+                           Text="{Binding PhoneNumber}"
+                           Keyboard="Telephone"
+                           BackgroundColor="#f1f8e9"
+                           TextColor="#388e3c"
+                           HeightRequest="44"/>
+
+                    <Label Text="Password" FontAttributes="Bold" TextColor="#388e3c"/>
+                    <Entry Placeholder="Password"
+                           Text="{Binding Password}"
+                           IsPassword="True"
+                           BackgroundColor="#f1f8e9"
+                           TextColor="#388e3c"
+                           HeightRequest="44"/>
+
+                    <Label Text="Confirm Password" FontAttributes="Bold" TextColor="#388e3c"/>
+                    <Entry Placeholder="Confirm Password"
+                           Text="{Binding ConfirmPassword}"
+                           IsPassword="True"
+                           BackgroundColor="#f1f8e9"
+                           TextColor="#388e3c"
+                           HeightRequest="44"/>
+
+                    <!-- User Role Selector -->
+                    <Label Text="I am registering as:" FontAttributes="Bold" TextColor="#388e3c"/>
+                    <HorizontalStackLayout Spacing="20">
+                        <RadioButton Content="Client" IsChecked="{Binding IsFarmer, Converter={StaticResource InverseBoolConverter}}" />
+                        <RadioButton Content="Farmer" IsChecked="{Binding IsFarmer}" />
+                    </HorizontalStackLayout>
+
+                    <!-- Extra Fields for Farmers -->
+                    <StackLayout IsVisible="{Binding IsFarmer}">
+                        <Label Text="Farm Name" FontAttributes="Bold" TextColor="#388e3c"/>
+                        <Entry Placeholder="Enter your farm name"
+                               Text="{Binding FarmName}"
+                               BackgroundColor="#f1f8e9"
+                               TextColor="#388e3c"
+                               HeightRequest="44"/>
+
+                        <Label Text="Farm Location" FontAttributes="Bold" TextColor="#388e3c"/>
+                        <Entry Placeholder="Enter your farm location"
+                               Text="{Binding FarmLocation}"
+                               BackgroundColor="#f1f8e9"
+                               TextColor="#388e3c"
+                               HeightRequest="44"/>
+
+                        <Label Text="Types of Produce Grown" FontAttributes="Bold" TextColor="#388e3c"/>
+                        <VerticalStackLayout>
+                            <CheckBox IsChecked="{Binding IsFruits}" Color="#388e3c"/>
+                            <Label Text="Fruits" TextColor="#388e3c"/>
+                            <CheckBox IsChecked="{Binding IsVegetables}" Color="#388e3c"/>
+                            <Label Text="Vegetables" TextColor="#388e3c"/>
+                            <CheckBox IsChecked="{Binding IsDairy}" Color="#388e3c"/>
+                            <Label Text="Dairy" TextColor="#388e3c"/>
+                            <CheckBox IsChecked="{Binding IsGrains}" Color="#388e3c"/>
+                            <Label Text="Grains" TextColor="#388e3c"/>
+                            <CheckBox IsChecked="{Binding IsOtherProduce}" Color="#388e3c"/>
+                            <Label Text="Other" TextColor="#388e3c"/>
+                        </VerticalStackLayout>
+                    </StackLayout>
+
+                    <!-- Terms and Sign Up -->
+                    <HorizontalStackLayout Spacing="10" VerticalOptions="Center">
+                        <CheckBox IsChecked="{Binding IsTermsAccepted}" Color="#388e3c"/>
+                        <Label Text="I agree to the Terms &amp; Privacy Policy" VerticalOptions="Center" TextColor="#388e3c"/>
+                    </HorizontalStackLayout>
+
+                    <Button Text="Sign Up"
+                            BackgroundColor="#388e3c"
+                            TextColor="White"
+                            CornerRadius="20"
+                            FontAttributes="Bold"
+                            HeightRequest="48"
+                            Command="{Binding RegisterCommand}"/>
+
+                    <!-- Already have account -->
+                    <HorizontalStackLayout HorizontalOptions="Center" Spacing="4" Margin="0,10,0,0">
+                        <Label Text="Already have an account?" TextColor="#388e3c"/>
+                        <Label Text="Log in here"
+                               TextColor="#689f38"
+                               FontAttributes="Bold">
+                            <Label.GestureRecognizers>  
+                                <TapGestureRecognizer Command="{Binding LoginCommand}" />
+                            </Label.GestureRecognizers>
+                        </Label>
+                    </HorizontalStackLayout>
+                </VerticalStackLayout>
+            </Border>
+        </Grid>
+    </ScrollView>
+</ContentPage>
