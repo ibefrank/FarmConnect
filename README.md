@@ -1,10 +1,27 @@
 # FarmConnect
-## MY KASMALL PROJECT
 FarmConnect is a modern, cross-platform application built with .NET MAUI (.NET 9) designed to connect farmers and clients, promoting sustainable agriculture and fresh produce access. The app features a clean, responsive design with natural, earthy tones to reflect its agricultural focus.
 
-## Features
+## MY KASMALL PROJECT
+ 🚧 This project is a work in progress and is being developed gradually.
 
-- **Cross-Platform:** Runs on iOS, Android, Windows, and macOS.
+# ✅ Current Progress
+
+- [x] Login UI
+- [x] Register UI
+- [x] SQLite integration for user data
+- [x] MVVM architecture setup
+## 🛠️ Built With
+
+- .NET MAUI
+- SQLite (via `sqlite-net-pcl`)
+- CommunityToolkit.Mvvm (MVVM Toolkit)
+
+## 🔄 Upcoming Features
+
+- Marketplace Page
+- Farmer/Client Role Switching
+- Product Listing and Orders
+- Notifications & Messaging
 ## Getting Started
 
 ### Prerequisites
