@@ -4,9 +4,9 @@ namespace FarmConnect.Views;
 
 public partial class RegisterPage : ContentPage
 {
-    public RegisterPage()
+    public RegisterPage(RegisterViewModel viewModel)
     {
         InitializeComponent();
-        BindingContext = new RegisterViewModel();
+        BindingContext = viewModel;
     }
 }

@@ -1,89 +1,137 @@
-﻿using System;
-using System.Collections.Generic;
-using System.Linq;
-using System.Text;
-using System.Threading.Tasks;
-using CommunityToolkit.Mvvm.ComponentModel;
+﻿using CommunityToolkit.Mvvm.ComponentModel;
 using CommunityToolkit.Mvvm.Input;
 using FarmConnect.Model;
 using FarmConnect.Services;
-using System.Threading.Tasks;
 
 namespace FarmConnect.ViewModel
-{   
-public partial class RegisterViewModel : ObservableObject
+{
+    public partial class RegisterViewModel : ObservableObject
     {
-        private string? _fullName;
+        // Injected database service via constructor
+        private readonly DatabaseService _databaseService;
+
+        public RegisterViewModel(DatabaseService databaseService)
+        {
+            _databaseService = databaseService;
+        }
+
+        // === Basic Registration Fields ===
+
+        private string? fullName;
         public string? FullName
         {
-            get => _fullName;
-            set => SetProperty(ref _fullName, value);
+            get => fullName;
+            set => SetProperty(ref fullName, value);
         }
 
-        private string? _email;
+        private string? email;
         public string? Email
         {
-            get => _email;
-            set => SetProperty(ref _email, value);
+            get => email;
+            set => SetProperty(ref email, value);
         }
 
-        private string? _phoneNumber;
+        private string? phoneNumber;
         public string? PhoneNumber
         {
-            get => _phoneNumber;
-            set => SetProperty(ref _phoneNumber, value);
+            get => phoneNumber;
+            set => SetProperty(ref phoneNumber, value);
         }
 
-        private string? _password;
+        private string? password;
         public string? Password
         {
-            get => _password;
-            set => SetProperty(ref _password, value);
+            get => password;
+            set => SetProperty(ref password, value);
         }
 
-        private string? _confirmPassword;
+        private string? confirmPassword;
         public string? ConfirmPassword
         {
-            get => _confirmPassword;
-            set => SetProperty(ref _confirmPassword, value);
+            get => confirmPassword;
+            set => SetProperty(ref confirmPassword, value);
         }
 
-        private bool _isFarmer;
+        private bool isFarmer;
         public bool IsFarmer
         {
-            get => _isFarmer;
-            set => SetProperty(ref _isFarmer, value);
+            get => isFarmer;
+            set => SetProperty(ref isFarmer, value);
         }
+
+        // === Extra Fields for Farmers ===
+
+        private string? farmName;
+        public string? FarmName
+        {
+            get => farmName;
+            set => SetProperty(ref farmName, value);
+        }
+
+        private string? farmLocation;
+        public string? FarmLocation
+        {
+            get => farmLocation;
+            set => SetProperty(ref farmLocation, value);
+        }
+
+        public bool IsFruits { get; set; }
+        public bool IsVegetables { get; set; }
+        public bool IsDairy { get; set; }
+        public bool IsGrains { get; set; }
+        public bool IsOtherProduce { get; set; }
+
+        // === Registration Logic ===
 
         [RelayCommand]
         private async Task Register()
         {
-            await DatabaseService.InitAsync();
+            await _databaseService.InitAsync();
 
-            // Basic validation
+            // Validate inputs
             if (string.IsNullOrWhiteSpace(FullName) ||
                 string.IsNullOrWhiteSpace(Email) ||
                 string.IsNullOrWhiteSpace(PhoneNumber) ||
                 string.IsNullOrWhiteSpace(Password) ||
-                Password != ConfirmPassword)
+                string.IsNullOrWhiteSpace(ConfirmPassword))
             {
-                // Show error message (implement as needed)
+                await Shell.Current.DisplayAlert("Error", "Please fill in all required fields.", "OK");
                 return;
             }
 
+            if (Password != ConfirmPassword)
+            {
+                await Shell.Current.DisplayAlert("Error", "Passwords do not match.", "OK");
+                return;
+            }
+
+            if (IsFarmer && (string.IsNullOrWhiteSpace(FarmName) || string.IsNullOrWhiteSpace(FarmLocation)))
+            {
+                await Shell.Current.DisplayAlert("Error", "Please fill in farm details.", "OK");
+                return;
+            }
+
+            // Create user model
             var user = new User
             {
                 FullName = FullName,
                 Email = Email,
                 PhoneNumber = PhoneNumber,
-                Password = Password, // Hash in production!
+                Password = Password, // You should hash this in production
                 Role = IsFarmer ? "Farmer" : "Client"
             };
 
-            await DatabaseService.AddUserAsync(user);
+            await _databaseService.AddUserAsync(user);
 
-            // Optionally, navigate to login or marketplace page
-            // await Shell.Current.GoToAsync("//LoginPage");
+            await Shell.Current.DisplayAlert("Success", "Registration successful!", "OK");
+
+            // Clear fields
+            FullName = Email = PhoneNumber = Password = ConfirmPassword = FarmName = FarmLocation = string.Empty;
+            IsFarmer = false;
+            IsFruits = IsVegetables = IsDairy = IsGrains = IsOtherProduce = false;
+
+            // Navigate to login page
+            await Shell.Current.GoToAsync("///LoginPage");
         }
     }
 }
