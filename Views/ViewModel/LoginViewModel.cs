@@ -60,6 +60,11 @@ namespace FarmConnect.ViewModel
         {
             
             _databaseService = databaseService;
+            _ = InitializeDatabase();
+        }
+        private async Task InitializeDatabase()
+        {
+            await _databaseService.InitAsync();
         }
 
         [RelayCommand]
@@ -99,7 +104,7 @@ namespace FarmConnect.ViewModel
         {
             if (IsSupportedPlatform())
             {
-                await Shell.Current.GoToAsync("RegisterPage");
+                await Shell.Current.GoToAsync("///RegisterPage");
             }
         }
 

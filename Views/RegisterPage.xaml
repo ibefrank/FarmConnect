@@ -106,7 +106,7 @@
                             <Label Text="Fruits" TextColor="#388e3c"/>
                             <CheckBox IsChecked="{Binding IsVegetables}" Color="#388e3c"/>
                             <Label Text="Vegetables" TextColor="#388e3c"/>
-                            <CheckBox IsChecked="{Binding IsDairy}" Color="#388e3c"/>
+                            <CheckBox  IsChecked="{Binding IsDairy}" Color="#388e3c"/>
                             <Label Text="Dairy" TextColor="#388e3c"/>
                             <CheckBox IsChecked="{Binding IsGrains}" Color="#388e3c"/>
                             <Label Text="Grains" TextColor="#388e3c"/>
