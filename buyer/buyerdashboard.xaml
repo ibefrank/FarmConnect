@@ -1,0 +1,315 @@
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FruitFarmers.Pages.BuyerDashboard"
+             Title="FruitFarmers"
+             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header with Search -->
+        <StackLayout Grid.Row="0" Padding="16,10" Spacing="12">
+            <Label Text="Welcome back, Buyer!" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="{StaticResource PrimaryTextColor}"/>
+            
+            <Frame Padding="10" CornerRadius="8" HasShadow="True" BorderColor="LightGray">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Image Grid.Column="0" 
+                           Source="search_icon.png" 
+                           WidthRequest="20" 
+                           HeightRequest="20"
+                           VerticalOptions="Center"
+                           Margin="0,0,10,0"/>
+                    <Entry Grid.Column="1" 
+                           Placeholder="Search for fruits, farms..." 
+                           VerticalOptions="Center" 
+                           x:Name="SearchEntry"
+                           Completed="OnSearchCompleted"/>
+                </Grid>
+            </Frame>
+        </StackLayout>
+
+        <!-- Main Content -->
+        <ScrollView Grid.Row="1">
+            <StackLayout Padding="16,0,16,16" Spacing="20">
+                <!-- Recommended Products -->
+                <StackLayout>
+                    <Label Text="Recommended For You" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           Margin="0,0,0,8"
+                           TextColor="{StaticResource PrimaryTextColor}"/>
+                    
+                    <CollectionView x:Name="RecommendedProductsCollection" 
+                                    HeightRequest="170"
+                                    SelectionMode="Single"
+                                    SelectionChanged="OnProductSelected">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="12"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="0" CornerRadius="10" HasShadow="True" BorderColor="LightGray">
+                                    <Grid RowDefinitions="*,Auto,Auto" WidthRequest="140">
+                                        <Image Grid.Row="0" 
+                                               Source="{Binding ImageUrl}" 
+                                               Aspect="AspectFill"
+                                               HeightRequest="90"/>
+                                        <Label Grid.Row="1" 
+                                               Text="{Binding Name}" 
+                                               FontAttributes="Bold"
+                                               Margin="8,8,8,0"/>
+                                        <StackLayout Grid.Row="2" 
+                                                     Orientation="Horizontal" 
+                                                     Margin="8,4,8,8">
+                                            <Label Text="KSH" 
+                                                   TextColor="{StaticResource PrimaryColor}"
+                                                   FontSize="12"/>
+                                            <Label Text="{Binding Price}" 
+                                                   TextColor="{StaticResource PrimaryColor}"
+                                                   FontAttributes="Bold" 
+                                                   FontSize="14"/>
+                                            <Label Text="/kg" 
+                                                   TextColor="{StaticResource PrimaryColor}"
+                                                   FontSize="12"/>
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+
+                <!-- Featured Farms -->
+                <StackLayout>
+                    <Label Text="Featured Farms" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           Margin="0,0,0,8"
+                           TextColor="{StaticResource PrimaryTextColor}"/>
+                    
+                    <CollectionView x:Name="FeaturedFarmsCollection" 
+                                    HeightRequest="120"
+                                    SelectionMode="Single"
+                                    SelectionChanged="OnFarmerSelected">
+                        <CollectionView.ItemsLayout>
+                            <LinearItemsLayout Orientation="Horizontal" ItemSpacing="12"/>
+                        </CollectionView.ItemsLayout>
+                        <CollectionView.ItemTemplate>
+                            <DataTemplate>
+                                <Frame Padding="0" CornerRadius="10" HasShadow="True" BorderColor="LightGray">
+                                    <Grid RowDefinitions="Auto,*" ColumnDefinitions="Auto,*" WidthRequest="220">
+                                        <Image Grid.Row="0" 
+                                               Grid.Column="0"
+                                               Grid.RowSpan="2"
+                                               Source="{Binding ImageUrl}" 
+                                               Aspect="AspectFill"
+                                               WidthRequest="80"
+                                               HeightRequest="80"
+                                               Margin="8"/>
+                                        <Label Grid.Row="0" 
+                                               Grid.Column="1"
+                                               Text="{Binding FarmName}" 
+                                               FontAttributes="Bold"
+                                               VerticalOptions="End"
+                                               Margin="0,8,8,0"/>
+                                        <StackLayout Grid.Row="1" 
+                                                     Grid.Column="1"
+                                                     Orientation="Horizontal" 
+                                                     VerticalOptions="Start"
+                                                     Margin="0,4,8,8">
+                                            <Image Source="location_icon.png" 
+                                                   WidthRequest="12" 
+                                                   HeightRequest="12"
+                                                   VerticalOptions="Center"/>
+                                            <Label Text="{Binding Location}" 
+                                                   FontSize="12"
+                                                   VerticalOptions="Center"
+                                                   Margin="4,0,0,0"/>
+                                        </StackLayout>
+                                    </Grid>
+                                </Frame>
+                            </DataTemplate>
+                        </CollectionView.ItemTemplate>
+                    </CollectionView>
+                </StackLayout>
+
+                <!-- Quick Navigation Buttons -->
+                <Frame Padding="16" CornerRadius="10" HasShadow="True" BorderColor="LightGray">
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="Auto,Auto">
+                        <Label Text="Quick Access" 
+                               Grid.Row="0" 
+                               Grid.ColumnSpan="2" 
+                               FontAttributes="Bold" 
+                               Margin="0,0,0,12"/>
+                        
+                        <!-- Marketplace Button -->
+                        <Button Grid.Row="1" 
+                                Grid.Column="0" 
+                                Text="Marketplace" 
+                                BackgroundColor="{StaticResource PrimaryColor}"
+                                Clicked="OnMarketplaceClicked"
+                                Margin="0,0,6,0"/>
+                        
+                        <!-- Orders Button -->
+                        <Button Grid.Row="1" 
+                                Grid.Column="1" 
+                                Text="My Orders" 
+                                BackgroundColor="{StaticResource SecondaryColor}"
+                                Clicked="OnOrdersClicked"
+                                Margin="6,0,0,0"/>
+                    </Grid>
+                </Frame>
+
+                <!-- Seasonal Fruits Section -->
+                <StackLayout>
+                    <Label Text="Seasonal Picks" 
+                           FontSize="18" 
+                           FontAttributes="Bold" 
+                           Margin="0,0,0,8"
+                           TextColor="{StaticResource PrimaryTextColor}"/>
+                    
+                    <Grid ColumnDefinitions="*,*" RowDefinitions="*,*" RowSpacing="12" ColumnSpacing="12">
+                        <!-- Four seasonal fruit categories - these would be clickable in the real app -->
+                        <Frame Grid.Row="0" Grid.Column="0" Padding="0" CornerRadius="10" HasShadow="True">
+                            <Grid RowDefinitions="*,Auto">
+                                <Image Grid.Row="0" Source="citrus_category.png" Aspect="AspectFill" HeightRequest="90"/>
+                                <Label Grid.Row="1" Text="Citrus" HorizontalOptions="Center" Margin="0,8"/>
+                            </Grid>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Citrus"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                        
+                        <Frame Grid.Row="0" Grid.Column="1" Padding="0" CornerRadius="10" HasShadow="True">
+                            <Grid RowDefinitions="*,Auto">
+                                <Image Grid.Row="0" Source="berries_category.png" Aspect="AspectFill" HeightRequest="90"/>
+                                <Label Grid.Row="1" Text="Berries" HorizontalOptions="Center" Margin="0,8"/>
+                            </Grid>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Berries"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                        
+                        <Frame Grid.Row="1" Grid.Column="0" Padding="0" CornerRadius="10" HasShadow="True">
+                            <Grid RowDefinitions="*,Auto">
+                                <Image Grid.Row="0" Source="tropical_category.png" Aspect="AspectFill" HeightRequest="90"/>
+                                <Label Grid.Row="1" Text="Tropical" HorizontalOptions="Center" Margin="0,8"/>
+                            </Grid>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Tropical"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                        
+                        <Frame Grid.Row="1" Grid.Column="1" Padding="0" CornerRadius="10" HasShadow="True">
+                            <Grid RowDefinitions="*,Auto">
+                                <Image Grid.Row="0" Source="stone_fruits_category.png" Aspect="AspectFill" HeightRequest="90"/>
+                                <Label Grid.Row="1" Text="Stone Fruits" HorizontalOptions="Center" Margin="0,8"/>
+                            </Grid>
+                            <Frame.GestureRecognizers>
+                                <TapGestureRecognizer Tapped="OnCategoryTapped" CommandParameter="Stone Fruits"/>
+                            </Frame.GestureRecognizers>
+                        </Frame>
+                    </Grid>
+                </StackLayout>
+            </StackLayout>
+        </ScrollView>
+
+        <!-- Bottom Navigation Bar -->
+        <Grid Grid.Row="2" 
+              ColumnDefinitions="*,*,*,*,*" 
+              BackgroundColor="White" 
+              Padding="0,10"
+              ColumnSpacing="0">
+            
+            <!-- Home Tab -->
+            <StackLayout Grid.Column="0" 
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Spacing="2">
+                <Image Source="home_icon.png" 
+                       WidthRequest="24" 
+                       HeightRequest="24"
+                       HorizontalOptions="Center"/>
+                <Label Text="Home" 
+                       FontSize="12" 
+                       TextColor="{StaticResource PrimaryColor}"
+                       HorizontalOptions="Center"/>
+            </StackLayout>
+            
+            <!-- Marketplace Tab -->
+            <StackLayout Grid.Column="1" 
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Spacing="2">
+                <Image Source="marketplace_icon.png" 
+                       WidthRequest="24" 
+                       HeightRequest="24"
+                       HorizontalOptions="Center"/>
+                <Label Text="Market" 
+                       FontSize="12" 
+                       TextColor="{StaticResource SecondaryTextColor}"
+                       HorizontalOptions="Center"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnMarketplaceTabClicked"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            
+            <!-- Orders Tab -->
+            <StackLayout Grid.Column="2" 
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Spacing="2">
+                <Image Source="orders_icon.png" 
+                       WidthRequest="24" 
+                       HeightRequest="24"
+                       HorizontalOptions="Center"/>
+                <Label Text="Orders" 
+                       FontSize="12" 
+                       TextColor="{StaticResource SecondaryTextColor}"
+                       HorizontalOptions="Center"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnOrdersTabClicked"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            
+            <!-- Messages Tab -->
+            <StackLayout Grid.Column="3" 
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Spacing="2">
+                <Image Source="messages_icon.png" 
+                       WidthRequest="24" 
+                       HeightRequest="24"
+                       HorizontalOptions="Center"/>
+                <Label Text="Messages" 
+                       FontSize="12" 
+                       TextColor="{StaticResource SecondaryTextColor}"
+                       HorizontalOptions="Center"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnMessagesTabClicked"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            
+            <!-- Profile Tab -->
+            <StackLayout Grid.Column="4" 
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Spacing="2">
+                <Image Source="profile_icon.png" 
+                       WidthRequest="24" 
+                       HeightRequest="24"
+                       HorizontalOptions="Center"/>
+                <Label Text="Profile" 
+                       FontSize="12" 
+                       TextColor="{StaticResource SecondaryTextColor}"
+                       HorizontalOptions="Center"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnProfileTabClicked"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>

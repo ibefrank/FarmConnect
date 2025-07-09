@@ -1,0 +1,118 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FruitFarmers.Pages.OrderConfirmationPage"
+             Title="Order Confirmation"
+             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <ScrollView>
+        <StackLayout Padding="20" Spacing="20">
+            <!-- Success Icon -->
+            <Image Source="order_success.png" 
+                   WidthRequest="100" 
+                   HeightRequest="100"
+                   HorizontalOptions="Center"
+                   Margin="0,20,0,0"/>
+            
+            <!-- Confirmation Message -->
+            <Label Text="Order Placed Successfully!" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="{StaticResource PrimaryTextColor}"
+                   HorizontalOptions="Center"/>
+            
+            <Label Text="Thank you for your order. Your fresh fruits are on their way!" 
+                   FontSize="16" 
+                   TextColor="{StaticResource SecondaryTextColor}"
+                   HorizontalOptions="Center"
+                   HorizontalTextAlignment="Center"/>
+            
+            <!-- Order Details -->
+            <Frame Padding="16" 
+                   CornerRadius="10" 
+                   HasShadow="True"
+                   BorderColor="LightGray"
+                   Margin="0,20,0,0">
+                <StackLayout Spacing="16">
+                    <Label Text="Order Details" 
+                           FontSize="18" 
+                           FontAttributes="Bold"/>
+                    
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="12" ColumnSpacing="16">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Order Number:" FontAttributes="Bold"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="FRF-45879" TextColor="{StaticResource PrimaryColor}"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Text="Order Date:" FontAttributes="Bold"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding OrderDate, StringFormat='{0:dd MMM yyyy, HH:mm}'}"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0" Text="Delivery:" FontAttributes="Bold"/>
+                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding DeliveryMethod}"/>
+                        
+                        <Label Grid.Row="3" Grid.Column="0" Text="Payment:" FontAttributes="Bold"/>
+                        <Label Grid.Row="3" Grid.Column="1" Text="{Binding PaymentMethod}"/>
+                    </Grid>
+                    
+                    <BoxView HeightRequest="1" 
+                              BackgroundColor="LightGray" 
+                              Margin="0,8"/>
+                    
+                    <Label Text="Order Summary" 
+                           FontSize="16" 
+                           FontAttributes="Bold"/>
+                    
+                    <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="8">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Subtotal" TextColor="{StaticResource SecondaryTextColor}"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding Subtotal, StringFormat='KSH {0}'}" HorizontalOptions="End"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Text="Delivery Fee" TextColor="{StaticResource SecondaryTextColor}"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="{Binding DeliveryFee, StringFormat='KSH {0}'}" HorizontalOptions="End"/>
+                        
+                        <BoxView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="1" BackgroundColor="LightGray" Margin="0,8"/>
+                        
+                        <Label Grid.Row="3" Grid.Column="0" Text="Total Paid" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}"/>
+                        <Label Grid.Row="3" Grid.Column="1" Text="{Binding TotalPaid, StringFormat='KSH {0}'}" FontAttributes="Bold" TextColor="{StaticResource PrimaryColor}" HorizontalOptions="End"/>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+            
+            <!-- Delivery Information -->
+            <Frame Padding="16" 
+                   CornerRadius="10" 
+                   HasShadow="True"
+                   BorderColor="LightGray">
+                <StackLayout Spacing="16">
+                    <Label Text="Delivery Information" 
+                           FontSize="18" 
+                           FontAttributes="Bold"/>
+                    
+                    <Grid ColumnDefinitions="Auto,*" RowDefinitions="Auto,Auto,Auto" RowSpacing="12" ColumnSpacing="16">
+                        <Label Grid.Row="0" Grid.Column="0" Text="Address:" FontAttributes="Bold"/>
+                        <Label Grid.Row="0" Grid.Column="1" Text="{Binding DeliveryAddress}"/>
+                        
+                        <Label Grid.Row="1" Grid.Column="0" Text="Status:" FontAttributes="Bold"/>
+                        <Label Grid.Row="1" Grid.Column="1" Text="Processing" TextColor="Orange"/>
+                        
+                        <Label Grid.Row="2" Grid.Column="0" Text="Estimated Delivery:" FontAttributes="Bold"/>
+                        <Label Grid.Row="2" Grid.Column="1" Text="{Binding EstimatedDelivery, StringFormat='{0:dd MMM yyyy}'}"/>
+                    </Grid>
+                </StackLayout>
+            </Frame>
+            
+            <!-- Action Buttons -->
+            <StackLayout Spacing="16" Margin="0,20,0,40">
+                <Button Text="Track Order" 
+                        BackgroundColor="{StaticResource PrimaryColor}"
+                        CornerRadius="8"
+                        HeightRequest="50"
+                        Clicked="OnTrackOrderClicked"/>
+                
+                <Button Text="Continue Shopping" 
+                        BackgroundColor="{StaticResource SecondaryColor}"
+                        TextColor="White"
+                        CornerRadius="8"
+                        HeightRequest="50"
+                        Clicked="OnContinueShoppingClicked"/>
+            </StackLayout>
+        </StackLayout>
+    </ScrollView>
+</ContentPage>
