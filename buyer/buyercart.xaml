@@ -1,0 +1,269 @@
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FruitFarmers.Pages.BuyerCartPage"
+             Title="Shopping Cart"
+             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header -->
+        <StackLayout Grid.Row="0" Padding="16,10" Spacing="12">
+            <Label Text="Shopping Cart" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="{StaticResource PrimaryTextColor}"/>
+            
+            <Label Text="{Binding CartItemCount, StringFormat='{0} items in your cart'}" 
+                   FontSize="14" 
+                   TextColor="{StaticResource SecondaryTextColor}"/>
+        </StackLayout>
+
+        <!-- Cart Items -->
+        <ScrollView Grid.Row="1">
+            <StackLayout Padding="16,0,16,16" Spacing="16">
+                <!-- Cart Items List -->
+                <CollectionView x:Name="CartItemsCollection" 
+                                SelectionMode="None"
+                                EmptyView="Your cart is empty">
+                    <CollectionView.ItemTemplate>
+                        <DataTemplate>
+                            <Frame Margin="0,0,0,12" 
+                                   Padding="12" 
+                                   CornerRadius="10" 
+                                   HasShadow="True"
+                                   BorderColor="LightGray">
+                                <Grid ColumnDefinitions="Auto,*,Auto" RowDefinitions="Auto,Auto,Auto">
+                                    <!-- Product Image -->
+                                    <Image Grid.Row="0" 
+                                           Grid.Column="0"
+                                           Grid.RowSpan="3"
+                                           Source="{Binding Product.ImageUrl}" 
+                                           Aspect="AspectFill"
+                                           WidthRequest="80"
+                                           HeightRequest="80"
+                                           Margin="0,0,12,0"/>
+                                    
+                                    <!-- Product Name -->
+                                    <Label Grid.Row="0" 
+                                           Grid.Column="1"
+                                           Text="{Binding Product.Name}" 
+                                           FontAttributes="Bold"
+                                           FontSize="16"/>
+                                    
+                                    <!-- Farmer Name -->
+                                    <StackLayout Grid.Row="1" 
+                                                 Grid.Column="1"
+                                                 Orientation="Horizontal">
+                                        <Image Source="farm_icon.png" 
+                                               WidthRequest="12" 
+                                               HeightRequest="12"
+                                               VerticalOptions="Center"/>
+                                        <Label Text="{Binding Product.FarmerName}" 
+                                               FontSize="12"
+                                               VerticalOptions="Center"
+                                               Margin="4,0,0,0"/>
+                                    </StackLayout>
+                                    
+                                    <!-- Quantity Controls -->
+                                    <HorizontalStackLayout Grid.Row="2" 
+                                                         Grid.Column="1"
+                                                         Spacing="8">
+                                        <Button Text="-" 
+                                                WidthRequest="36" 
+                                                HeightRequest="36"
+                                                CornerRadius="18"
+                                                BackgroundColor="{StaticResource LightGray}"
+                                                TextColor="Black"
+                                                FontAttributes="Bold"
+                                                Clicked="OnDecreaseQuantityClicked"
+                                                CommandParameter="{Binding Product.Id}"/>
+                                        
+                                        <Label Text="{Binding Quantity}" 
+                                               VerticalOptions="Center"
+                                               HorizontalOptions="Center"
+                                               WidthRequest="36"
+                                               HorizontalTextAlignment="Center"
+                                               FontAttributes="Bold"/>
+                                        
+                                        <Button Text="+" 
+                                                WidthRequest="36" 
+                                                HeightRequest="36"
+                                                CornerRadius="18"
+                                                BackgroundColor="{StaticResource PrimaryColor}"
+                                                TextColor="White"
+                                                FontAttributes="Bold"
+                                                Clicked="OnIncreaseQuantityClicked"
+                                                CommandParameter="{Binding Product.Id}"/>
+                                    </HorizontalStackLayout>
+                                    
+                                    <!-- Item Price -->
+                                    <StackLayout Grid.Row="0" 
+                                                 Grid.Column="2"
+                                                 Grid.RowSpan="2"
+                                                 HorizontalOptions="End"
+                                                 VerticalOptions="Start">
+                                        <Label Text="{Binding ItemTotal, StringFormat='KSH {0}'}" 
+                                               TextColor="{StaticResource PrimaryColor}"
+                                               FontAttributes="Bold" 
+                                               FontSize="16"
+                                               HorizontalOptions="End"/>
+                                        
+                                        <Label Text="{Binding Product.Price, StringFormat='KSH {0}/kg'}" 
+                                               TextColor="{StaticResource SecondaryTextColor}"
+                                               FontSize="12"
+                                               HorizontalOptions="End"/>
+                                    </StackLayout>
+                                    
+                                    <!-- Remove Button -->
+                                    <Button Grid.Row="2" 
+                                            Grid.Column="2"
+                                            Text="Remove" 
+                                            BackgroundColor="Transparent"
+                                            TextColor="{StaticResource DangerColor}"
+                                            FontSize="12"
+                                            HorizontalOptions="End"
+                                            VerticalOptions="End"
+                                            Clicked="OnRemoveItemClicked"
+                                            CommandParameter="{Binding Product.Id}"/>
+                                </Grid>
+                            </Frame>
+                        </DataTemplate>
+                    </CollectionView.ItemTemplate>
+                    <CollectionView.EmptyView>
+                        <StackLayout VerticalOptions="CenterAndExpand" 
+                                     HorizontalOptions="CenterAndExpand"
+                                     Padding="20">
+                            <Image Source="empty_cart.png" 
+                                   WidthRequest="100" 
+                                   HeightRequest="100"
+                                   Opacity="0.5"
+                                   HorizontalOptions="Center"/>
+                            <Label Text="Your cart is empty" 
+                                   TextColor="{StaticResource SecondaryTextColor}"
+                                   FontSize="18"
+                                   HorizontalOptions="Center"
+                                   Margin="0,20,0,0"/>
+                            <Button Text="Browse Products" 
+                                    BackgroundColor="{StaticResource PrimaryColor}"
+                                    Clicked="OnBrowseProductsClicked"
+                                    HorizontalOptions="Center"
+                                    Margin="0,20,0,0"
+                                    WidthRequest="200"/>
+                        </StackLayout>
+                    </CollectionView.EmptyView>
+                </CollectionView>
+                
+                <!-- Order Summary -->
+                <Frame IsVisible="{Binding HasItems}"
+                       Padding="16" 
+                       CornerRadius="10" 
+                       HasShadow="True"
+                       BorderColor="LightGray">
+                    <StackLayout Spacing="12">
+                        <Label Text="Order Summary" 
+                               FontAttributes="Bold" 
+                               FontSize="18"/>
+                        
+                        <Grid ColumnDefinitions="*,Auto" RowDefinitions="Auto,Auto,Auto,Auto" RowSpacing="8">
+                            <Label Grid.Row="0" Grid.Column="0" Text="Subtotal" TextColor="{StaticResource SecondaryTextColor}"/>
+                            <Label Grid.Row="0" Grid.Column="1" Text="{Binding Subtotal, StringFormat='KSH {0}'}" HorizontalOptions="End"/>
+                            
+                            <Label Grid.Row="1" Grid.Column="0" Text="Delivery Fee" TextColor="{StaticResource SecondaryTextColor}"/>
+                            <Label Grid.Row="1" Grid.Column="1" Text="{Binding DeliveryFee, StringFormat='KSH {0}'}" HorizontalOptions="End"/>
+                            
+                            <BoxView Grid.Row="2" Grid.Column="0" Grid.ColumnSpan="2" HeightRequest="1" BackgroundColor="LightGray" Margin="0,8"/>
+                            
+                            <Label Grid.Row="3" Grid.Column="0" Text="Total" FontAttributes="Bold" TextColor="{StaticResource PrimaryTextColor}"/>
+                            <Label Grid.Row="3" Grid.Column="1" Text="{Binding Total, StringFormat='KSH {0}'}" FontAttributes="Bold" HorizontalOptions="End"/>
+                        </Grid>
+                    </StackLayout>
+                </Frame>
+                
+                <!-- Delivery Options -->
+                <Frame IsVisible="{Binding HasItems}"
+                       Padding="16" 
+                       CornerRadius="10" 
+                       HasShadow="True"
+                       BorderColor="LightGray">
+                    <StackLayout Spacing="12">
+                        <Label Text="Delivery Options" 
+                               FontAttributes="Bold" 
+                               FontSize="18"/>
+                        
+                        <RadioButton Content="Home Delivery" 
+                                     GroupName="DeliveryOption"
+                                     IsChecked="True"
+                                     CheckedChanged="OnDeliveryOptionChanged"
+                                     Value="HomeDelivery"/>
+                        
+                        <RadioButton Content="Pickup from Farm" 
+                                     GroupName="DeliveryOption"
+                                     CheckedChanged="OnDeliveryOptionChanged"
+                                     Value="Pickup"/>
+                    </StackLayout>
+                </Frame>
+                
+                <!-- Payment Methods -->
+                <Frame IsVisible="{Binding HasItems}"
+                       Padding="16" 
+                       CornerRadius="10" 
+                       HasShadow="True"
+                       BorderColor="LightGray">
+                    <StackLayout Spacing="12">
+                        <Label Text="Payment Method" 
+                               FontAttributes="Bold" 
+                               FontSize="18"/>
+                        
+                        <RadioButton Content="MPesa" 
+                                     GroupName="PaymentMethod"
+                                     IsChecked="True"
+                                     CheckedChanged="OnPaymentMethodChanged"
+                                     Value="MPesa"/>
+                        
+                        <RadioButton Content="Card Payment" 
+                                     GroupName="PaymentMethod"
+                                     CheckedChanged="OnPaymentMethodChanged"
+                                     Value="Card"/>
+                        
+                        <RadioButton Content="Cash on Delivery" 
+                                     GroupName="PaymentMethod"
+                                     CheckedChanged="OnPaymentMethodChanged"
+                                     Value="Cash"/>
+                    </StackLayout>
+                </Frame>
+            </StackLayout>
+        </ScrollView>
+
+        <!-- Checkout Button -->
+        <Grid Grid.Row="2" 
+              ColumnDefinitions="*,Auto" 
+              BackgroundColor="White" 
+              Padding="16"
+              ColumnSpacing="16">
+            
+            <Label Grid.Column="0" 
+                   Text="{Binding Total, StringFormat='KSH {0}'}" 
+                   FontAttributes="Bold" 
+                   FontSize="20"
+                   VerticalOptions="Center"
+                   IsVisible="{Binding HasItems}"/>
+            
+            <Button Grid.Column="1" 
+                    Text="Checkout" 
+                    BackgroundColor="{StaticResource PrimaryColor}"
+                    CornerRadius="8"
+                    WidthRequest="150"
+                    Clicked="OnCheckoutClicked"
+                    IsVisible="{Binding HasItems}"/>
+            
+            <Button Grid.Column="0" 
+                    Grid.ColumnSpan="2" 
+                    Text="Back to Shopping" 
+                    BackgroundColor="{StaticResource SecondaryColor}"
+                    CornerRadius="8"
+                    Clicked="OnBrowseProductsClicked"
+                    IsVisible="{Binding HasNoItems}"/>
+        </Grid>
+    </Grid>
+</ContentPage>

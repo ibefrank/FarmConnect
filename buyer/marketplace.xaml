@@ -1,0 +1,292 @@
+
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FruitFarmers.Pages.MarketplacePage"
+             Title="Marketplace"
+             BackgroundColor="{StaticResource PageBackgroundColor}">
+
+    <Grid RowDefinitions="Auto,*,Auto">
+        <!-- Header with Search and Filters -->
+        <StackLayout Grid.Row="0" Padding="16,10" Spacing="12">
+            <Label Text="Marketplace" 
+                   FontSize="24" 
+                   FontAttributes="Bold" 
+                   TextColor="{StaticResource PrimaryTextColor}"/>
+            
+            <!-- Search Bar -->
+            <Frame Padding="10" CornerRadius="8" HasShadow="True" BorderColor="LightGray">
+                <Grid ColumnDefinitions="Auto,*">
+                    <Image Grid.Column="0" 
+                           Source="search_icon.png" 
+                           WidthRequest="20" 
+                           HeightRequest="20"
+                           VerticalOptions="Center"
+                           Margin="0,0,10,0"/>
+                    <Entry Grid.Column="1" 
+                           Placeholder="Search for fruits, farms..." 
+                           VerticalOptions="Center" 
+                           x:Name="SearchEntry"
+                           Text="{Binding SearchQuery}"
+                           TextChanged="OnSearchTextChanged"
+                           Completed="OnSearchButtonPressed"/>
+                </Grid>
+            </Frame>
+            
+            <!-- Filter Options -->
+            <ScrollView Orientation="Horizontal" HorizontalScrollBarVisibility="Never">
+                <HorizontalStackLayout Spacing="8">
+                    <Button Text="All Fruits" 
+                            BackgroundColor="{StaticResource PrimaryColor}" 
+                            CornerRadius="20"
+                            HeightRequest="36"
+                            Padding="12,0"
+                            Clicked="OnFilterClicked"
+                            CommandParameter="all"/>
+                    
+                    <Button Text="Seasonal" 
+                            BackgroundColor="{StaticResource LightGray}" 
+                            TextColor="Black"
+                            CornerRadius="20"
+                            HeightRequest="36"
+                            Padding="12,0"
+                            Clicked="OnFilterClicked"
+                            CommandParameter="seasonal"/>
+                    
+                    <Button Text="Nearby" 
+                            BackgroundColor="{StaticResource LightGray}" 
+                            TextColor="Black"
+                            CornerRadius="20"
+                            HeightRequest="36"
+                            Padding="12,0"
+                            Clicked="OnFilterClicked"
+                            CommandParameter="nearby"/>
+                    
+                    <Button Text="Best Price" 
+                            BackgroundColor="{StaticResource LightGray}" 
+                            TextColor="Black"
+                            CornerRadius="20"
+                            HeightRequest="36"
+                            Padding="12,0"
+                            Clicked="OnFilterClicked"
+                            CommandParameter="price"/>
+                    
+                    <Button Text="Top Rated" 
+                            BackgroundColor="{StaticResource LightGray}" 
+                            TextColor="Black"
+                            CornerRadius="20"
+                            HeightRequest="36"
+                            Padding="12,0"
+                            Clicked="OnFilterClicked"
+                            CommandParameter="rated"/>
+                </HorizontalStackLayout>
+            </ScrollView>
+        </StackLayout>
+
+        <!-- Product Listings -->
+        <RefreshView Grid.Row="1" 
+                      x:Name="ProductsRefreshView"
+                      IsRefreshing="{Binding IsBusy}"
+                      Command="{Binding RefreshCommand}">
+            <CollectionView x:Name="ProductsCollection"
+                            SelectionMode="Single"
+                            SelectionChanged="OnProductSelected">
+                <CollectionView.ItemsLayout>
+                    <LinearItemsLayout Orientation="Vertical" ItemSpacing="12"/>
+                </CollectionView.ItemsLayout>
+                <CollectionView.ItemTemplate>
+                    <DataTemplate>
+                        <Frame Margin="16,0" 
+                               Padding="0" 
+                               CornerRadius="10" 
+                               HasShadow="True"
+                               BorderColor="LightGray">
+                            <Grid RowDefinitions="Auto,Auto" ColumnDefinitions="Auto,*,Auto">
+                                <!-- Product Image -->
+                                <Image Grid.Row="0" 
+                                       Grid.Column="0"
+                                       Grid.RowSpan="2"
+                                       Source="{Binding ImageUrl}" 
+                                       Aspect="AspectFill"
+                                       WidthRequest="100"
+                                       HeightRequest="100"
+                                       Margin="12"/>
+                                
+                                <!-- Product Details -->
+                                <StackLayout Grid.Row="0" 
+                                             Grid.Column="1"
+                                             Margin="0,12,0,0">
+                                    <Label Text="{Binding Name}" 
+                                           FontAttributes="Bold"
+                                           FontSize="16"/>
+                                    
+                                    <StackLayout Orientation="Horizontal">
+                                        <Image Source="farm_icon.png" 
+                                               WidthRequest="12" 
+                                               HeightRequest="12"
+                                               VerticalOptions="Center"/>
+                                        <Label Text="{Binding FarmerName}" 
+                                               FontSize="12"
+                                               VerticalOptions="Center"
+                                               Margin="4,0,0,0"/>
+                                    </StackLayout>
+                                    
+                                    <StackLayout Orientation="Horizontal">
+                                        <Image Source="location_icon.png" 
+                                               WidthRequest="12" 
+                                               HeightRequest="12"
+                                               VerticalOptions="Center"/>
+                                        <Label Text="{Binding Location}" 
+                                               FontSize="12"
+                                               VerticalOptions="Center"
+                                               Margin="4,0,0,0"/>
+                                    </StackLayout>
+                                </StackLayout>
+                                
+                                <!-- Price -->
+                                <StackLayout Grid.Row="0" 
+                                             Grid.Column="2"
+                                             Margin="0,12,12,0">
+                                    <StackLayout Orientation="Horizontal" 
+                                                 HorizontalOptions="End">
+                                        <Label Text="KSH" 
+                                               TextColor="{StaticResource PrimaryColor}"
+                                               FontSize="12"/>
+                                        <Label Text="{Binding Price}" 
+                                               TextColor="{StaticResource PrimaryColor}"
+                                               FontAttributes="Bold" 
+                                               FontSize="16"/>
+                                    </StackLayout>
+                                    <Label Text="per kg" 
+                                           TextColor="{StaticResource SecondaryTextColor}"
+                                           FontSize="10"
+                                           HorizontalOptions="End"/>
+                                </StackLayout>
+                                
+                                <!-- Add to Cart Button -->
+                                <Button Grid.Row="1" 
+                                        Grid.Column="1"
+                                        Grid.ColumnSpan="2"
+                                        Text="Add to Cart" 
+                                        BackgroundColor="{StaticResource SecondaryColor}"
+                                        CornerRadius="20"
+                                        HeightRequest="36"
+                                        Margin="0,0,12,12"
+                                        HorizontalOptions="End"
+                                        WidthRequest="120"
+                                        Clicked="OnAddToCartClicked"
+                                        CommandParameter="{Binding Id}"/>
+                            </Grid>
+                        </Frame>
+                    </DataTemplate>
+                </CollectionView.ItemTemplate>
+                <CollectionView.EmptyView>
+                    <StackLayout VerticalOptions="Center" HorizontalOptions="Center">
+                        <Image Source="empty_products.png" 
+                               WidthRequest="100" 
+                               HeightRequest="100"
+                               Opacity="0.5"/>
+                        <Label Text="No products found" 
+                               TextColor="{StaticResource SecondaryTextColor}"
+                               HorizontalOptions="Center"/>
+                    </StackLayout>
+                </CollectionView.EmptyView>
+            </CollectionView>
+        </RefreshView>
+
+        <!-- Bottom Navigation Bar -->
+        <Grid Grid.Row="2" 
+              ColumnDefinitions="*,*,*,*,*" 
+              BackgroundColor="White" 
+              Padding="0,10"
+              ColumnSpacing="0">
+            
+            <!-- Home Tab -->
+            <StackLayout Grid.Column="0" 
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Spacing="2">
+                <Image Source="home_icon.png" 
+                       WidthRequest="24" 
+                       HeightRequest="24"
+                       HorizontalOptions="Center"/>
+                <Label Text="Home" 
+                       FontSize="12" 
+                       TextColor="{StaticResource SecondaryTextColor}"
+                       HorizontalOptions="Center"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnHomeTabClicked"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            
+            <!-- Marketplace Tab -->
+            <StackLayout Grid.Column="1" 
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Spacing="2">
+                <Image Source="marketplace_icon.png" 
+                       WidthRequest="24" 
+                       HeightRequest="24"
+                       HorizontalOptions="Center"/>
+                <Label Text="Market" 
+                       FontSize="12" 
+                       TextColor="{StaticResource PrimaryColor}"
+                       HorizontalOptions="Center"/>
+            </StackLayout>
+            
+            <!-- Orders Tab -->
+            <StackLayout Grid.Column="2" 
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Spacing="2">
+                <Image Source="orders_icon.png" 
+                       WidthRequest="24" 
+                       HeightRequest="24"
+                       HorizontalOptions="Center"/>
+                <Label Text="Orders" 
+                       FontSize="12" 
+                       TextColor="{StaticResource SecondaryTextColor}"
+                       HorizontalOptions="Center"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnOrdersTabClicked"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            
+            <!-- Messages Tab -->
+            <StackLayout Grid.Column="3" 
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Spacing="2">
+                <Image Source="messages_icon.png" 
+                       WidthRequest="24" 
+                       HeightRequest="24"
+                       HorizontalOptions="Center"/>
+                <Label Text="Messages" 
+                       FontSize="12" 
+                       TextColor="{StaticResource SecondaryTextColor}"
+                       HorizontalOptions="Center"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnMessagesTabClicked"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+            
+            <!-- Profile Tab -->
+            <StackLayout Grid.Column="4" 
+                         HorizontalOptions="Center"
+                         VerticalOptions="Center"
+                         Spacing="2">
+                <Image Source="profile_icon.png" 
+                       WidthRequest="24" 
+                       HeightRequest="24"
+                       HorizontalOptions="Center"/>
+                <Label Text="Profile" 
+                       FontSize="12" 
+                       TextColor="{StaticResource SecondaryTextColor}"
+                       HorizontalOptions="Center"/>
+                <StackLayout.GestureRecognizers>
+                    <TapGestureRecognizer Tapped="OnProfileTabClicked"/>
+                </StackLayout.GestureRecognizers>
+            </StackLayout>
+        </Grid>
+    </Grid>
+</ContentPage>
