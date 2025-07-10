@@ -1,0 +1,48 @@
+<?xml version="1.0" encoding="utf-8" ?>
+<ContentPage xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+             xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+             x:Class="FarmConnect.Views.MarketplacePage"
+              x:DataType="viewmodel:Marketplace"
+             Title="MarketplacePage"
+             BackgroundColor="#f1f8e9">
+    <ContentPage.ToolbarItems>
+        <ToolbarItem Text="Logout"
+                     Clicked="OnLogoutClicked"/>
+    </ContentPage.ToolbarItems>
+
+    <StackLayout Padding="16" Spacing="12">
+        <Label Text="Welcome to the Marketplace"
+               FontSize="24"
+               FontAttributes="Bold"
+               TextColor="#388e3c" />
+
+        <SearchBar Placeholder="Search produce..."
+                   Text="{Binding SearchQuery}"
+                   SearchCommand="{Binding SearchCommand}"
+                   BackgroundColor="White" />
+
+        <CollectionView ItemsSource="{Binding ProduceList}">
+            <CollectionView.ItemTemplate>
+                <DataTemplate>
+                    <Frame CornerRadius="12"
+                           BackgroundColor="White"
+                           Padding="12"
+                           Margin="5">
+                        <StackLayout>
+                            <Label Text="{Binding Name}"
+                                   FontSize="20"
+                                   TextColor="#388e3c"
+                                   FontAttributes="Bold" />
+                            <Label Text="{Binding Description}" 
+                                   FontSize="14"
+                                   TextColor="#666" />
+                            <Label Text="{Binding Price, StringFormat='Price: {0:C}'}" 
+                                   FontSize="16"
+                                   TextColor="#2e7d32" />
+                        </StackLayout>
+                    </Frame>
+                </DataTemplate>
+            </CollectionView.ItemTemplate>
+        </CollectionView>
+    </StackLayout>
+</ContentPage>
