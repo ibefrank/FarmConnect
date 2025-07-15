@@ -1,0 +1,29 @@
+<?xml version="1.0" encoding="UTF-8" ?>
+<Shell
+    x:Class="FarmConnect.AppShell"
+    xmlns="http://schemas.microsoft.com/dotnet/2021/maui"
+    xmlns:x="http://schemas.microsoft.com/winfx/2009/xaml"
+    xmlns:local="clr-namespace:FarmConnect.Views"
+    xmlns:views="clr-namespace:FarmConnect.Views"
+    Title="FarmConnect">
+
+    <ShellContent
+        Title="Home"
+        ContentTemplate="{DataTemplate views:LoginPage}"
+        Route="LoginPage" />
+
+    <ShellContent Route="RegisterPage" 
+                  ContentTemplate="{DataTemplate views:RegisterPage}" />
+    <ShellContent Route="ForgotpasswordPage"
+              ContentTemplate="{DataTemplate views:ForgotPasswordPage}" />
+    <TabBar>
+        <Tab Title="Dashboard" Icon="dashboard_icon.png">
+            <ShellContent Route="MarketplacePage"
+               ContentTemplate="{DataTemplate views:MarketplacePage}" />
+        </Tab>
+        <Tab Title="Profile" Icon="profile_icon.png">
+            <ShellContent Route="ProfilePage"
+                       ContentTemplate="{DataTemplate views:ProfilePage}" />
+        </Tab>
+    </TabBar>
+</Shell>
